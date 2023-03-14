@@ -14,7 +14,7 @@ export default function Card(props) {
         </button>
       </div>
 
-      <NavLink to={`/detail/${props.id}`}>
+      <NavLink className={style.link} to={`/detail/${props.id}`}>
         <div className={style.imageContainer}>
           <img src={props.image} alt={`Foto de ${props.name}`} />
           <span>{props.name}</span>

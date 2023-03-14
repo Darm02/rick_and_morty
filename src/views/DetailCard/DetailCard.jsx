@@ -1,44 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import style from "./DetailCard.module.css";
+import { personajes } from "../../App";
 
 function DetailCard(props) {
   const { id } = useParams();
   const [character, setCharacter] = useState({});
   const navegate = useNavigate();
-  useEffect(() => {
-    fetch(`https://rickandmortyapi.com/api/character/${id}`)
-      .then((response) => response.json())
-      .then((char) => {
-        if (char.name) {
-          setCharacter(char);
-        } else {
-          window.alert("No hay personajes con ese ID");
-        }
-      })
-      
-    return setCharacter({});
-  }, [id]);
+  const URL_BASE = "https://be-a-rym.up.railway.app/api";
+  const API_KEY = "a89ddacf7dee.874182cd7d4a54e358e0";
 
-  const {origin} = character;
-  function idk(){
-    let string ="";
-    for(let i in origin){
-      string += i + " "
+  useEffect(() => {
+    console.log(personajes);
+    const characterEncontrado = personajes.find(char => char.id === id);
+    if(characterEncontrado?.name){
+      setCharacter(characterEncontrado);
     }
-    return string;
-  }
+  }, [id]);
 
   const goBack = () => {
     navegate("/");
   };
 
+  const { name, status, species, gender, origin, image } = character;
+
   return (
-    <>
-      <button onClick={goBack}>Volver</button>
-      <h1>{character.name}</h1>
-      {console.log(idk())}
-      
-    </>
+    <div>
+      <button className={style.boton} onClick={goBack}>
+        Volver
+      </button>
+      <div className={style.infoContainer}>
+        <div className={style.textInfo}>
+          <h2>{name}</h2>
+          <p>Estatus: <span className={style.hide}>{status}</span></p>
+          <p>Origen: {origin?.name}</p>
+          <p>Género: {gender}</p>
+          <p>Especie: {species}</p>
+        </div>
+
+        <div className={style.image}>
+          <img src={image} alt={`Imagen de ${name}`} />
+        </div>
+      </div>
+    </div>
   );
 }
 
